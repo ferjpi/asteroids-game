@@ -1,3 +1,5 @@
+local Bullet = require("bullet")
+
 function love.load()
   Sprites = {}
   Sprites.ship = love.graphics.newImage("sprites/ship.png")
@@ -7,11 +9,13 @@ function love.load()
   ship.rotateSpeed = 180
 
   rotationOffset = 90
+
 end
 
 function love.update(dt)
   Move_player( dt)
 
+  Bullet.update(dt)
 end
 
 function love.draw()
@@ -26,11 +30,19 @@ function love.draw()
   love.graphics.setColor(1, 0, 0) -- red
   love.graphics.line(ship.x, ship.y, fx, fy)
   love.graphics.setColor(1, 1, 1) -- reset
+
+
+
+  -- Draw bullets
+  Bullet.draw()
 end
 
 function love.keypressed(key)
   if key == "escape" then
     love.event.quit()
+  elseif key == "space" then
+    local angle = math.rad(ship.rotate - rotationOffset)
+    Bullet.shoot(ship.x, ship.y, angle)
   end
 end
 
@@ -54,5 +66,6 @@ function Move_player( dt)
     ship.x = ship.x - math.cos(angle) * ship.speed * dt
     ship.y = ship.y - math.sin(angle) * ship.speed * dt
   end
-
 end
+
+
