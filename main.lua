@@ -1,3 +1,5 @@
+local UI = require("ui")
+
 function love.load()
   Sprites = {}
   Sprites.ship = love.graphics.newImage("sprites/ship.png")
@@ -26,6 +28,9 @@ function love.draw()
   love.graphics.setColor(1, 0, 0) -- red
   love.graphics.line(ship.x, ship.y, fx, fy)
   love.graphics.setColor(1, 1, 1) -- reset
+
+  -- Draw UI
+  UI.draw()
 end
 
 function love.keypressed(key)
