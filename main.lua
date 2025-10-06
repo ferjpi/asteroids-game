@@ -8,17 +8,23 @@ function love.load()
 end
 
 function love.update(dt)
-
+  if UI.isPaused or not UI.isGameStarted then
+    return
+  end
   Bullet.update(dt)
   Player.move(dt)
 end
 
 function love.draw()
-  love.graphics.setFont(love.graphics.newFont(64))
-  -- love.graphics.printf("Asteroids", 0, love.graphics.getHeight() / 2, love.graphics.getWidth(), "center")
+
 
   -- Draw UI
   UI.draw()
+
+  if UI.isPaused or not UI.isGameStarted then
+    return
+  end
+
 
   -- Draw player
   Player.draw()
@@ -31,8 +37,25 @@ end
 
 function love.keypressed(key)
   if key == "escape" then
-    love.event.quit()
-  elseif key == "space" then
+
+    if not UI.isPaused then
+      UI.isPaused = true
+    else
+      UI.isPaused = false
+    end
+
+  elseif key == "q" then
+    if UI.isPaused then
+      love.event.quit()
+    end
+  elseif key == "return" then
+
+    if UI.isMenuOpen and not UI.isGameStarted then
+      UI.isMenuOpen = false
+      UI.isGameStarted = true
+    end
+
+  elseif key == "space" and not UI.isGameStarted then
     local angle = math.rad(Player.rotate - Player.rotationOffset)
     Bullet.shoot(Player.x, Player.y, angle)
   end
