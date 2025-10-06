@@ -1,5 +1,5 @@
+local UI = require("ui")
 local Player = require("player")
-
 local Bullet = require("bullet")
 
 function love.load()
@@ -16,6 +16,9 @@ end
 function love.draw()
   love.graphics.setFont(love.graphics.newFont(64))
   -- love.graphics.printf("Asteroids", 0, love.graphics.getHeight() / 2, love.graphics.getWidth(), "center")
+
+  -- Draw UI
+  UI.draw()
 
   -- Draw player
   Player.draw()
