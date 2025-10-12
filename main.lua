@@ -17,7 +17,7 @@ function love.update(dt)
   Player.move(dt)
 
   Asteroid.update(dt)
-  Asteroid.checkCollisions(Bullet.list)
+  Asteroid.checkCollisions(Bullet.bullets)
 
   Alien.update(dt, Player.x, Player.y)
 

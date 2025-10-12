@@ -6,7 +6,7 @@ Bullet.bullets = {}
 local bulletSpeed = 400
 local screenW, screenH = love.graphics.getWidth(), love.graphics.getHeight()
 
-Bullet.list = Bullet.bullets
+Bullet.list = bullets
 
 -- Create and add a new bullet
 function Bullet.shoot(x, y, angle)
