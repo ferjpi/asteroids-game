@@ -9,8 +9,15 @@ Player.y = love.graphics.getHeight() / 2
 Player.rotate = 0
 Player.rotationOffset = 90
 
+Player.isAlive = true
+Player.hitRadius = Player.sprite:getWidth() / 2
+
 
 function Player.draw()
+  if not Player.isAlive then
+    return
+  end
+
   love.graphics.draw(
     Player.sprite,
     Player.x,
@@ -24,6 +31,10 @@ function Player.draw()
 end
 
 function Player.move(dt)
+  if not Player.isAlive then
+    return
+  end
+
   local isScancode = love.keyboard.isScancodeDown
   if isScancode("a") then
     -- rotate left
@@ -60,6 +71,24 @@ function Player.constrain_to_screen()
   elseif Player.y > screenH - halfH then
     Player.y = screenH - halfH
   end
+end
+
+function Player.checkCollision(x, y, radius)
+  local dx = Player.x - x
+  local dy = Player.y - y
+  local distance = math.sqrt(dx * dx + dy * dy)
+
+  if distance <= Player.radius + radius then
+    Player.isAlive = false
+    return true
+  end
+
+  return false
+
+end
+
+function Player.die()
+  Player.isAlive = false
 end
 
 return Player
