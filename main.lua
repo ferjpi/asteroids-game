@@ -1,6 +1,7 @@
 local UI = require("ui")
 local Player = require("player")
 local Bullet = require("bullet")
+local Asteroid = require("asteroid")
 local Alien = require("alien")
 
 function love.load()
@@ -14,6 +15,10 @@ function love.update(dt)
   end
   Bullet.update(dt)
   Player.move(dt)
+
+  Asteroid.update(dt)
+  Asteroid.checkCollisions(Bullet.list)
+
   Alien.update(dt, Player.x, Player.y)
 
 
@@ -64,6 +69,9 @@ function love.draw()
 
   -- Draw bullets
   Bullet.draw()
+
+  -- Draw asteroids
+  Asteroid.draw()
 end
 
 function love.keypressed(key)
@@ -84,6 +92,7 @@ function love.keypressed(key)
     if UI.isMenuOpen and not UI.isGameStarted then
       UI.isMenuOpen = false
       UI.isGameStarted = true
+      Asteroid.spawnWave(5)
     end
 
   elseif key == "space" and UI.isGameStarted then
