@@ -2,11 +2,11 @@
 local Bullet = {}
 Bullet.__index = Bullet
 
-local bullets = {}
+Bullet.bullets = {}
 local bulletSpeed = 400
 local screenW, screenH = love.graphics.getWidth(), love.graphics.getHeight()
 
-Bullet.list = bullets
+Bullet.list = Bullet.bullets
 
 -- Create and add a new bullet
 function Bullet.shoot(x, y, angle)
@@ -19,25 +19,25 @@ function Bullet.shoot(x, y, angle)
     dy = math.sin(angle) * bulletSpeed,
     radius = 4,
   }
-  table.insert(bullets, b)
+  table.insert(Bullet.bullets, b)
 end
 
 -- Update bullet positions and remove off-screen bullets
 function Bullet.update(dt)
-  for i = #bullets, 1, -1 do
-    local b = bullets[i]
+  for i = #Bullet.bullets, 1, -1 do
+    local b = Bullet.bullets[i]
     b.x = b.x + b.dx * dt
     b.y = b.y + b.dy * dt
 
     if b.x < 0 or b.x > screenW or b.y < 0 or b.y > screenH then
-      table.remove(bullets, i)
+      table.remove(Bullet.bullets, i)
     end
   end
 end
 
 -- Draw all bullets
 function Bullet.draw()
-  for _, b in ipairs(bullets) do
+  for _, b in ipairs(Bullet.bullets) do
     love.graphics.circle("fill", b.x, b.y, 4)
   end
 end
