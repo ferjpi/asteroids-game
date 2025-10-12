@@ -6,6 +6,7 @@ local bullets = {}
 local bulletSpeed = 400
 local screenW, screenH = love.graphics.getWidth(), love.graphics.getHeight()
 
+Bullet.list = bullets
 
 -- Create and add a new bullet
 function Bullet.shoot(x, y, angle)
@@ -16,6 +17,7 @@ function Bullet.shoot(x, y, angle)
     y = by,
     dx = math.cos(angle) * bulletSpeed,
     dy = math.sin(angle) * bulletSpeed,
+    radius = 4,
   }
   table.insert(bullets, b)
 end

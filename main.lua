@@ -1,6 +1,7 @@
 local UI = require("ui")
 local Player = require("player")
 local Bullet = require("bullet")
+local Asteroid = require("asteroid")
 
 function love.load()
   Sprites = {}
@@ -13,6 +14,9 @@ function love.update(dt)
   end
   Bullet.update(dt)
   Player.move(dt)
+  Asteroid.update(dt)
+  
+  Asteroid.checkCollisions(Bullet.list)
 end
 
 function love.draw()
@@ -33,6 +37,9 @@ function love.draw()
 
   -- Draw bullets
   Bullet.draw()
+
+  -- Draw asteroids
+  Asteroid.draw()
 end
 
 function love.keypressed(key)
@@ -53,9 +60,10 @@ function love.keypressed(key)
     if UI.isMenuOpen and not UI.isGameStarted then
       UI.isMenuOpen = false
       UI.isGameStarted = true
+      Asteroid.spawnWave(5)
     end
 
-  elseif key == "space" and not UI.isGameStarted then
+  elseif key == "space" and UI.isGameStarted then
     local angle = math.rad(Player.rotate - Player.rotationOffset)
     Bullet.shoot(Player.x, Player.y, angle)
   end
