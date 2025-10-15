@@ -12,7 +12,7 @@ function UI.get_score()
 end
 
 function UI.set_score(score)
-  UI.score = score
+  UI.score = UI.score + score
 end
 
 function UI.draw()

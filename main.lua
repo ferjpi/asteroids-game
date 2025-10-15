@@ -5,7 +5,6 @@ local Asteroid = require("asteroid")
 local Alien = require("alien")
 
 function love.load()
-  Sprites = {}
 
 end
 
@@ -19,39 +18,44 @@ function love.update(dt)
   Asteroid.update(dt)
   Asteroid.checkCollisions(Bullet.bullets)
 
-  Alien.update(dt, Player.x, Player.y)
+  Alien.updateAll(dt, Player.x, Player.y)
 
 
-  -- Check if player bullets hit alien
-  -- Assuming your Bullet module has a way to get player bullets
-  -- You'll need to implement this based on your Bullet structure
-  for i = #Bullet.bullets, 1, -1 do  -- Adjust based on your Bullet module
+ for i = #Bullet.bullets, 1, -1 do
     local bullet = Bullet.bullets[i]
-    if Alien.checkCollision(bullet.x, bullet.y, 3) then  -- 3 is bullet radius
-      table.remove(Bullet.bullets, i)
-      -- Alien is now dead (Alien.isAlive = false)
+    local hit = false
+
+    for _, alien in ipairs(Aliens) do
+      if alien:checkCollision(bullet.x, bullet.y, 3) then
+        table.remove(Bullet.bullets, i)
+        hit = true
+        UI.set_score(alien.getScore())
+        break
+      end
     end
-   end
 
-  -- Check if alien bullets hit player
-  -- Assuming Player has x, y, and a hitRadius property
-  if Alien.checkBulletCollision(Player.x, Player.y, Player.hitRadius or 20) then
-    -- Handle player being hit (reduce health, game over, etc.)
-    print("Player hit!")
-    Player.die()
+    if hit then
+      break
+    end
   end
 
-  -- Check collision between alien and player
-  if Alien.checkCollision(Player.x, Player.y, Player.hitRadius or 20) then
-    -- Both alien and player should die or take damage
-    print("Collision!")
-    Player.die()
+ for _, alien in ipairs(Aliens) do
+    if alien:checkBulletCollision(Player.x, Player.y, Player.hitRadius or 20) then
+      Player.die()
+      break
+    end
   end
+
+  for _, alien in ipairs(Aliens) do
+    if alien:checkCollision(Player.x, Player.y, Player.hitRadius or 20) then
+      Player.die()
+      break
+    end
+  end
+
 end
 
 function love.draw()
-
-
   -- Draw UI
   UI.draw()
 
@@ -65,7 +69,7 @@ function love.draw()
   Player.constrain_to_screen()
 
   -- Draw alien
-  Alien.draw()
+  Alien.drawAll()
 
   -- Draw bullets
   Bullet.draw()
